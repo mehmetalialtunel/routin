@@ -84,4 +84,7 @@
     <plugin name="cordova-plugin-googleplus" spec="^5.2.3">
         <variable name="RESERVED_CLIENT_ID" value="935414839974-uc97ma5i8luq96ndrn1mf18pf9ofudhh.apps.googleusercontent.com" />
     </plugin>
+    <plugin name="cordova-plugin-geolocation" spec="^4.0.1" />
+    <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
+    <engine name="android" spec="^7.1.1" />
 </widget>

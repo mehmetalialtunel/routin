@@ -1,0 +1,29 @@
+<ion-header>
+
+  <ion-navbar>
+
+    <ion-title>Rotalarım</ion-title>
+
+    <ion-buttons end>
+        <button ion-button icon-only (click)="newRoute()">
+          <ion-icon name="add"></ion-icon>
+        </button>
+    </ion-buttons>
+
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+    <button ion-item *ngFor="let item of myRoutes | async" (click)="openRouteDetail(item)">
+      {{ item.name }}
+    </button> 
+  </ion-list>
+
+  <ion-fab right bottom>
+    <button ion-fab color="light"><ion-icon name="search" (click)="searchRoute()"></ion-icon></button>
+  </ion-fab>
+
+</ion-content>

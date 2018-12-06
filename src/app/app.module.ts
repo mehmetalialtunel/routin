@@ -8,12 +8,22 @@ import { IonicStorageModule, Storage } from '@ionic/storage';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
 
-import { Items } from '../mocks/providers/items';
 import { Settings } from '../providers/providers';
 import { User } from '../providers/providers';
 import { Api } from '../providers/providers';
 import { MyApp } from './app.component';
+
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AuthService } from '../services/auth.service';
+import { RouteService } from '../services/route.service';
+import { ConnectivityServiceProvider } from '../providers/connectivity-service/connectivity-service';
+import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
+import { Network } from '../../node_modules/@ionic-native/network';
+import { Geolocation } from '@ionic-native/geolocation';
+import { MyroutesPageModule } from '../pages/myroutes/myroutes.module';
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -36,6 +46,15 @@ export function provideSettings(storage: Storage) {
   });
 }
 
+const firebaseConfig = {
+    apiKey: "AIzaSyC4jsof09cifRziJCUvT7JWDfSjqDXyrEg",
+    authDomain: "routin-c39d0.firebaseapp.com",
+    databaseURL: "https://routin-c39d0.firebaseio.com",
+    projectId: "routin-c39d0",
+    storageBucket: "routin-c39d0.appspot.com",
+    messagingSenderId: "48784415586"
+}
+
 @NgModule({
   declarations: [
     MyApp
@@ -51,7 +70,11 @@ export function provideSettings(storage: Storage) {
       }
     }),
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    MyroutesPageModule,
+    AngularFireModule.initializeApp(firebaseConfig), // <-- firebase here
+    AngularFireAuthModule,
+    AngularFireDatabaseModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -59,14 +82,20 @@ export function provideSettings(storage: Storage) {
   ],
   providers: [
     Api,
-    Items,
     User,
     Camera,
     SplashScreen,
     StatusBar,
     { provide: Settings, useFactory: provideSettings, deps: [Storage] },
     // Keep this to enable Ionic's runtime error handling during development
-    { provide: ErrorHandler, useClass: IonicErrorHandler }
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    AngularFireAuthModule,
+    AuthService,
+    RouteService,
+    ConnectivityServiceProvider,
+    GoogleMapsProvider,
+    Network,
+    Geolocation
   ]
 })
 export class AppModule { }

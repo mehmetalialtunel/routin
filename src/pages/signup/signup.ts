@@ -1,53 +1,51 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { IonicPage, NavController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AuthService } from '../../services/auth.service';
+import { MyroutesPage } from '../myroutes/myroutes';
 
-import { User } from '../../providers/providers';
-import { MainPage } from '../pages';
+/**
+ * Generated class for the SignupPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
 
 @IonicPage()
 @Component({
   selector: 'page-signup',
-  templateUrl: 'signup.html'
+  templateUrl: 'signup.html',
 })
 export class SignupPage {
-  // The account fields for the login form.
-  // If you're using the username field with or without email, make
-  // sure to add it to the type
-  account: { name: string, email: string, password: string } = {
-    name: 'Test Human',
-    email: 'test@example.com',
-    password: 'test'
+
+  account: { email: string, password: string } = {
+    email: '',
+    password: ''
   };
 
-  // Our translated text strings
-  private signupErrorString: string;
-
-  constructor(public navCtrl: NavController,
-    public user: User,
-    public toastCtrl: ToastController,
-    public translateService: TranslateService) {
-
-    this.translateService.get('SIGNUP_ERROR').subscribe((value) => {
-      this.signupErrorString = value;
-    })
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+    public translateService: TranslateService, private auth: AuthService) {
   }
 
   doSignup() {
-    // Attempt to login in through our User service
-    this.user.signup(this.account).subscribe((resp) => {
-      this.navCtrl.push(MainPage);
-    }, (err) => {
+    debugger;
+    if (!this.account.password || !this.account.email){
+      return;
+    }
 
-      this.navCtrl.push(MainPage);
+    let credentials = {
+      email: this.account.email,
+      password: this.account.password
+    }
 
-      // Unable to sign up
-      let toast = this.toastCtrl.create({
-        message: this.signupErrorString,
-        duration: 3000,
-        position: 'top'
-      });
-      toast.present();
-    });
+    this.auth.signUp(credentials)
+      .then( () => this.navCtrl.setRoot(MyroutesPage),
+            error => alert('error'));
+
   }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad SignupPage');
+  }
+
 }

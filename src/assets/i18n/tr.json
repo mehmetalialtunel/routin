@@ -33,5 +33,9 @@
   "ITEM_CREATE_TITLE": "Yeni Öğe",
   "ITEM_CREATE_CHOOSE_IMAGE": "Yeni Görsel",
   "CARDS_TITLE": "Sosyal",
-  "SEARCH_TITLE": "Arama"
+  "SEARCH_TITLE": "Arama",
+
+  "MY_ROUTES": "Rotalarım",
+  "NEW_ROUTE": "Yeni rota",
+  "SAVE_ROUTE": "Rota Oluştur"
 }

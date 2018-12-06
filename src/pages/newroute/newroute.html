@@ -1,0 +1,28 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Yeni rota</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+
+    <ion-item>
+      <ion-label floating>Rota Adı</ion-label>
+      <ion-input type="text" [(ngModel)]="route.name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+        <ion-label>Gidiş saati</ion-label>
+        <ion-datetime displayFormat="H:mm" pickerFormat="H mm" [(ngModel)]="route.start"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+        <ion-label>Dönüş saati</ion-label>
+        <ion-datetime displayFormat="H:mm" pickerFormat="H mm" [(ngModel)]="route.stop"></ion-datetime>
+    </ion-item>
+
+    <button ion-button full (click)="addRoute(route)">Kaydet</button>
+
+</ion-content>
