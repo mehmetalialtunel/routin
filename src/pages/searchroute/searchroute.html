@@ -2,7 +2,7 @@
 
     <ion-navbar>
   
-      <ion-title>{{ 'MY_ROUTES' | translate}}</ion-title>
+      <ion-title>Rota Ara</ion-title>
   
     </ion-navbar>
   
@@ -12,8 +12,8 @@
   
     <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
     <ion-list>
-      <ion-item *ngFor="let item of items" (click)="openRouteDetail(item)">
-        {{ item }}
+      <ion-item *ngFor="let item of routes | async" (click)="openRouteDetail(item)">
+        {{ item.name }}
       </ion-item>
     </ion-list>
   
