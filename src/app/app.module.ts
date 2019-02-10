@@ -8,7 +8,6 @@ import { IonicStorageModule, Storage } from '@ionic/storage';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 import { Settings } from '../providers/providers';
 import { User } from '../providers/providers';
@@ -16,6 +15,7 @@ import { Api } from '../providers/providers';
 import { MyApp } from './app.component';
 
 import { AngularFireModule } from 'angularfire2';
+import { AngularFirestoreModule, AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AuthService } from '../services/auth.service';
 import { RouteService } from '../services/route.service';
@@ -72,9 +72,9 @@ const firebaseConfig = {
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     MyroutesPageModule,
-    AngularFireModule.initializeApp(firebaseConfig), // <-- firebase here
-    AngularFireAuthModule,
-    AngularFireDatabaseModule
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFirestoreModule,
+    AngularFireAuthModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

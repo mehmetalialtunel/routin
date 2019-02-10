@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{ 'LOGIN_TITLE'  }}</ion-title>
+    <ion-title>Giriş</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -11,23 +11,23 @@
     <ion-list>
 
       <ion-item>
-        <ion-label floating>{{ 'EMAIL'  }}</ion-label>
+        <ion-label floating>E-Mail</ion-label>
         <ion-input type="text" [(ngModel)]="account.email" name="email"></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label floating>{{ 'PASSWORD'  }}</ion-label>
+        <ion-label floating>Şifre</ion-label>
         <ion-input type="password" [(ngModel)]="account.password" name="password"></ion-input>
       </ion-item>
 
       <div padding>
-        <button ion-button color="primary" block>{{ 'LOGIN_BUTTON'  }}</button>
+        <button ion-button color="primary" block>Giriş</button>
       </div>
 
     </ion-list>
   </form>
   <button ion-button icon-left block clear (click)="openSignup()">
     <ion-icon name="person-add"></ion-icon>
-    {{ 'SIGNUP'  }}
+    Kaydol
   </button>
 </ion-content>

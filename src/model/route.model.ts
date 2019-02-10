@@ -1,5 +1,5 @@
 export interface Route {
-    key?: string;
+    id?: string;
     name: string;
     owner: string;
     start: string;

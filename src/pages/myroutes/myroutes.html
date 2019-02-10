@@ -18,12 +18,14 @@
 
   <ion-list>
     <button ion-item *ngFor="let item of myRoutes | async" (click)="openRouteDetail(item)">
-      {{ item.name }}
+
+      <p *ngIf="item.owner == currentUser" >* {{ item.name }}</p>
+      <p *ngIf="item.owner != currentUser" >{{ item.name }}</p>
     </button> 
   </ion-list>
 
-  <ion-fab right bottom>
-    <button ion-fab color="light"><ion-icon name="search" (click)="searchRoute()"></ion-icon></button>
+  <ion-fab right bottom (click)="searchRoute()">
+    <button ion-fab color="light"><ion-icon name="search"></ion-icon></button>
   </ion-fab>
 
 </ion-content>

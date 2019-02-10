@@ -34,7 +34,6 @@ export class LoginPage {
 
   // Attempt to login in through our User service
   doLogin() {
-    debugger;
     if (!this.account.password || !this.account.email){
       return;
     }

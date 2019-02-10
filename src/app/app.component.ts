@@ -4,13 +4,31 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { Config, Nav, Platform } from 'ionic-angular';
 
-import { FirstRunPage } from '../pages/pages';
 import { Settings } from '../providers/providers';
 import { AuthService } from '../services/auth.service';
 import { MyroutesPage } from '../pages/myroutes/myroutes';
+import { AngularFirestore } from "angularfire2/firestore";
+import { MenuController } from 'ionic-angular';
 
 @Component({
-  template: `<ion-nav #content [root]="rootPage" ></ion-nav>`
+  template: `<ion-menu [content]="content" side="right" id="slidingMenu">
+
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Ayarlar</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-list>
+      <button ion-item (click)="logOut()">
+        Çıkış yap
+      </button>
+    </ion-list>
+  </ion-content>
+
+</ion-menu>
+<ion-nav #content [root]="rootPage" ></ion-nav>`
 })
 export class MyApp {
   rootPage: any;
@@ -18,15 +36,7 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   constructor(private translate: TranslateService, platform: Platform, settings: Settings, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen,
-    private auth: AuthService) {
-
-      const unsubscribe = auth.onAuthStateChanged(user => {
-        if (!user) {
-          this.rootPage = 'LoginPage';
-        } else {
-          this.rootPage = MyroutesPage;
-        }
-      });
+    private auth: AuthService, private fireStore: AngularFirestore, private menu: MenuController) {
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -35,6 +45,27 @@ export class MyApp {
       this.splashScreen.hide();
     });
     this.initTranslate();
+
+    this.auth.afAuth.authState.subscribe(
+					user => {
+						if (user) {
+              this.rootPage = MyroutesPage;
+              this.menu.enable(true, 'slidingMenu')
+						} else {
+              this.rootPage = 'LoginPage';
+              this.menu.enable(false, 'slidingMenu');
+						}
+					},
+					() => {
+            this.rootPage = 'LoginPage';
+					}
+				);
+
+  }
+
+  logOut(){
+    this.auth.logOut();
+    this.menu.close('slidingMenu');
   }
 
   initTranslate() {
@@ -55,7 +86,6 @@ export class MyApp {
         this.translate.use(this.translate.getBrowserLang());
       }
     } else {
-      debugger;
       this.translate.use('tr'); // Set your language here
     }
 

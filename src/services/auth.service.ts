@@ -7,7 +7,7 @@ export class AuthService {
 
     public user : User;
 
-    constructor(private afAuth : AngularFireAuth){
+    constructor(public afAuth : AngularFireAuth){
         afAuth.authState.subscribe(user => {
             this.user = user;
         })
@@ -25,8 +25,15 @@ export class AuthService {
         return this.afAuth.auth.onAuthStateChanged(user);
     }
 
+    subscribe(){
+        return this.afAuth.authState.subscribe();
+    }
+
     getCurrent(){
-        debugger;
         return this.afAuth.auth.currentUser;
+    }
+
+    logOut(){
+        return this.afAuth.auth.signOut();
     }
 }
