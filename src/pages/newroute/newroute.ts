@@ -1,5 +1,5 @@
-import { Component, ViewChild, ElementRef, NgZone } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, ViewController } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { TranslateService } from '../../../node_modules/@ngx-translate/core';
 import { RouteService } from '../../services/route.service';
 import { Route } from '../../model/route.model';
@@ -12,8 +12,6 @@ import { AuthService } from '../../services/auth.service';
  * Ionic pages and navigation.
  */
 
- declare var google;
-
 @IonicPage()
 @Component({
   selector: 'page-newroute',
@@ -24,6 +22,10 @@ export class NewroutePage {
   constructor(public navCtrl: NavController, public navParams: NavParams, private translateService: TranslateService,
         private routeService: RouteService, private auth: AuthService) {
 
+    if (navParams.data != undefined){
+      this.route = navParams.data;
+    }
+    
   }
 
   route: Route = {
@@ -34,10 +36,8 @@ export class NewroutePage {
   };
 
   addRoute(route: Route) {
-    this.route.owner = this.auth.getCurrent().uid;
-    this.routeService.addRoute(route).then(ref => {
-      console.log(ref);
-    })
+    this.routeService.saveRoute(route);
+    this.navCtrl.pop();
   }
 
 }

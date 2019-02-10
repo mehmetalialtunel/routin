@@ -1,32 +1,84 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from "angularfire2/database";
+import { AngularFirestore,
+    AngularFirestoreCollection,
+    AngularFirestoreDocument } from "angularfire2/firestore";
 import { Route } from "../model/route.model";
-import { AuthService } from "./auth.service";
+import { AngularFireAuth } from "angularfire2/auth";
+import { User } from 'firebase';
 import { Observable } from 'rxjs';
 
 @Injectable()
 export class RouteService {
 
-    private routeListRef = this.db.list<Route>('route');
-    private routeRef = this.db.database.ref('route');
+    // private ref = firebase.database().ref('route');
 
-    constructor(public db : AngularFireDatabase, private auth : AuthService){
+    routes: AngularFirestoreCollection<Route>;
 
+    private routeDoc: AngularFirestoreDocument<Route>;
+
+    private user: User;
+
+    constructor(private fireStore: AngularFirestore, private afAuth: AngularFireAuth){
+        this.routes = fireStore.collection("routes");
+        debugger;
+        afAuth.authState.subscribe(user => {
+            if (user){
+                debugger;
+                this.user = user;
+            }
+        })
     }
 
-    addRoute(route: Route) {
-        return this.routeListRef.push(route);
+    saveRoute(route: Route) {
+        debugger;
+        if (route.id != undefined){
+            this.routeDoc = this.fireStore.doc<Route>("routes/" + route.id);
+            this.routeDoc.update(route);
+        }else{
+            route.owner = this.user.uid;
+            this.routes.add(route);
+        }
     }
 
-    listMyRoutes(uid :string){
+    // listMyRoutes(uid: string){
+    //     let routes : Route[] = [];
+    //     firebase.database().ref('route').orderByChild('owner').equalTo(uid).on('value', snapshot => {
+    //         routes.length = 0;
+    //         snapshot.forEach(childSnapshot => {
+    //             let item = childSnapshot.val();
+    //             item.key = childSnapshot.key;
+    //             routes.push(item);
+    //         });
+    //     });
+    //     return routes;
+    // }
 
-        return this.routeListRef.valueChanges();
-        //debugger;
-        //return this.routeRef.equalTo(uid, "owner").once('value').then(snapshot => snapshot.val())
-        //.then((data) => {
-        //    debugger;
+    searchRoute(criteria: string){
+        let routes : Observable<Route[]>;
+        this.routes.ref.where("name", ">=", criteria).get().then(function(querySnapshot) {
+            querySnapshot.forEach(childSnapshot => {
+                debugger;
+                routes.push({
+                    id             : childSnapshot.id,
+                    name           : childSnapshot.data().name
+                   });
+            });
+        });
+
+        routes = this.routes.ref.where("name", ">=", criteria).get().then((querySnapshot) => {
         
-        //})
+            routes.
+        }
+        )
+        
+        
+        .snapshotChanges().map(actions => {
+            return actions.map(item => {
+              return { id: item.payload.doc.id, ...item.payload.doc.data() }
+            });
+          });
+        debugger;
+        return routes;
     }
    
 }

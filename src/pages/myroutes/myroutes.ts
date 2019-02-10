@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { TranslateService } from '@ngx-translate/core';
 import { RouteService } from '../../services/route.service';
 import { AuthService } from '../../services/auth.service';
 import { Observable } from 'rxjs';
+import { Route } from '../../model/route.model';
 
 /**
  * Generated class for the MyroutesPage page.
@@ -19,22 +19,23 @@ import { Observable } from 'rxjs';
 })
 export class MyroutesPage {
 
-  myRoutes: Observable<any>;
+  myRoutes: Observable<Route[]>;
+
+  currentUser: String;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private translateService: TranslateService, public routeService: RouteService, private auth: AuthService) {
+    public routeService: RouteService, private auth: AuthService) {
 
-      this.myRoutes = this.routeService.listMyRoutes("EJXSsbU6SwWjuDt2tyUovvUMkd42");
-      //this.myRoutes.subscribe(x => console.log(x));
-      //translateService.use('tr');
-  }
+      this.myRoutes = routeService.routes.snapshotChanges().map(actions => {
+        return actions.map(item => {
+          return { id: item.payload.doc.id, ...item.payload.doc.data() }
+        });
+      });
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad MyroutesPage');
   }
 
   openRouteDetail(item){
-    alert(item + " detayları");
+    this.navCtrl.push("NewroutePage", item);
   }
 
   newRoute(){
